@@ -30,6 +30,35 @@ $html_footer = <<FOOTER
 </html>
 FOOTER
 
+class Project < ActiveResource::Base
+  attr_reader :short, :hidden_tags, :password
+  
+  @token = $settings['token']
+  self.site = "http://www.pivotaltracker.com/services/v2"
+  headers['X-TrackerToken'] = @token
+
+  $settings['projects'].each do |p|
+    if p['id'] == self.object_id
+      @short = p['short']
+      @hidden_tags = []
+      for tag in p['hiddentags'].split(",")
+        @hidden_tags += tag.split
+      end
+      @password = p['password']
+    end
+  end
+  
+  def stories
+    StoryCollection.new(Story.find(:all, :params => { :project_id => self.id }))
+  end
+  
+  def current_stories
+    StoryCollection.new(Story.find(:all, :params => { :project_id => self.id }).reject { |item|
+      item.current_state == "accepted"
+    })
+  end
+end
+
 class Story < ActiveResource::Base
   @token = $settings['token']
   self.site = "http://www.pivotaltracker.com/services/v2/projects/:project_id"
@@ -69,35 +98,6 @@ class StoryCollection < Array
       s += "#{story.id}: #{story.name}\n"
     end
     s
-  end
-end
-
-class Project < ActiveResource::Base
-  attr_reader :short, :hidden_tags, :password
-  
-  @token = $settings['token']
-  self.site = "http://www.pivotaltracker.com/services/v2"
-  headers['X-TrackerToken'] = @token
-
-  $settings['projects'].each do |p|
-    if p['id'] == self.object_id
-      @short = p['short']
-      @hidden_tags = []
-      for tag in p['hiddentags'].split(",")
-        @hidden_tags += tag.split
-      end
-      @password = p['password']
-    end
-  end
-  
-  def stories
-    StoryCollection.new(Story.find(:all, :params => { :project_id => self.id }))
-  end
-  
-  def current_stories
-    StoryCollection.new(Story.find(:all, :params => { :project_id => self.id }).reject { |item|
-      item.current_state == "accepted"
-    })
   end
 end
 
