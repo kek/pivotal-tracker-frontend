@@ -11,7 +11,9 @@ $settings = YAML.load_file("/etc/pivotal-tracker-frontend.yml")
 $html_header = <<HEADER
 <html><head><title>Pivotal Tracker Frontend</title>
 <style type="text/css">
-body { font-size: 10pt; font-family: lucida grande, arial-sans-serif; background: #003300; color: white;}
+body {
+  font-size: 10pt; font-family: lucida grande, arial-sans-serif;
+  background: #003300; color: white; }
 h1 { font-size: 14pt; }
 h2 { font-size: 11pt; }
 h2.feature { color: green; }
@@ -44,7 +46,8 @@ class StoryCollection < Array
   def to_html
     html = ""
     @stories.each do |story| 
-      html += "<h2 class=\"#{story.story_type} #{story.current_state}\">#{story.story_type.capitalize} #{story.id} - #{story.name}"
+      html += "<h2 class=\"#{story.story_type} #{story.current_state}\">" +
+        "#{story.story_type.capitalize} #{story.id} - #{story.name}"
       unless story.current_state == "unstarted"
         html += " (#{story.current_state})\n"
       end
