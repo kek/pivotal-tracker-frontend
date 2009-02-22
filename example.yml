@@ -1,0 +1,14 @@
+# Example /etc/pivotal-tracker-frontend.yml
+
+token: your-api-key
+projects:
+  - id: 1
+    short: ptf
+    name: Pivotal Tracker Frontend
+    hiddentags: these, hidden, tags
+    password:
+  - id: 2
+    short: example
+    name: Other example project
+    hiddentags: more, unshown, labelings
+    password: password1
