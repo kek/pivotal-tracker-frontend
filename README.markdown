@@ -1,4 +1,5 @@
-== Description
+Description
+-----------
 
 CGI script that lists active stories in Pivotal Tracker projects.
 
