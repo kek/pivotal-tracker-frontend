@@ -3,6 +3,4 @@ Description
 
 CGI script that lists active stories in Pivotal Tracker projects.
 
-Put the configuration in /etc/pivotal-tracker-frontend.yml (see example.yml).
-
-Karl Eklund, localpart@gmail.com, February 2009
+Put tracker.rb in cgi-bin and the configuration in /etc/pivotal-tracker-frontend.yml (see example.yml).
