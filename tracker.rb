@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby
+#!/usr/bin/ruby
 
 require 'rubygems'
 require 'yaml'
@@ -9,7 +9,7 @@ require 'RedCloth'
 $settings = YAML.load_file("/etc/pivotal-tracker-frontend.yml")
 
 $html_header = <<HEADER
-<html><head><title>Pivotal Tracker Frontend</title>
+<html><head><title>Project overview</title>
 <style type="text/css">
 body {
   font-size: 10pt; font-family: lucida grande, arial-sans-serif;
@@ -20,6 +20,7 @@ h2.feature { color: green; }
 h2.chore { color: grey; }
 h2.bug { color: orange; }
 h2.started, h2.finished { color: lightgreen; }
+p.description { position: relative; left: 20px; }
 </style>
 </head>
 <body>
@@ -75,14 +76,19 @@ class StoryCollection < Array
   def to_html
     html = ""
     @stories.each do |story| 
-      html += "<h2 class=\"#{story.story_type} #{story.current_state}\">" +
-        "#{story.story_type.capitalize} #{story.id} - #{story.name}"
-      unless story.current_state == "unstarted"
-        html += " (#{story.current_state})\n"
-      end
-      html += "</h2>\n"
-      if story.description
-        html += "<p>#{RedCloth.new(story.description).to_html}</p>\n"
+      unless story.story_type == "chore"
+        html += "<h2 class=\"#{story.story_type} #{story.current_state}\">" +
+          "#{story.story_type.capitalize} #{story.id} - #{story.name}"
+        if story.story_type == "release"
+          html += " (#{story.deadline.to_s})"
+        end
+        unless story.current_state == "unstarted"
+          html += " (#{story.current_state})\n"
+        end
+        html += "</h2>\n"
+        if story.description
+          html += "<p class=\"description\">#{RedCloth.new(story.description).to_html}</p>\n"
+        end
       end
     end
     html
