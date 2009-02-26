@@ -12,7 +12,7 @@ $html_header = <<HEADER
 <html><head><title>Project overview</title>
 <style type="text/css">
 body {
-  font-size: 10pt; font-family: lucida grande, arial-sans-serif;
+  font-size: 10pt; font-family: lucida grande, arial, sans-serif;
   background: #003300; color: white; }
 h1 { font-size: 14pt; }
 h2 { font-size: 11pt; }
