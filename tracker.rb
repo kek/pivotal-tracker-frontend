@@ -75,20 +75,18 @@ class StoryCollection < Array
 
   def to_html
     html = ""
-    @stories.each do |story| 
-      unless story.story_type == "chore"
-        html += "<h2 class=\"#{story.story_type} #{story.current_state}\">" +
-          "#{story.story_type.capitalize} #{story.id} - #{story.name}"
-        if story.story_type == "release"
-          html += " (#{story.deadline.to_s})"
-        end
-        unless story.current_state == "unstarted"
-          html += " (#{story.current_state})\n"
-        end
-        html += "</h2>\n"
-        if story.description
-          html += "<p class=\"description\">#{RedCloth.new(story.description).to_html}</p>\n"
-        end
+    @stories.reject { |s| s.story_type == "chore" }.each do |story| 
+      html += "<h2 class=\"#{story.story_type} #{story.current_state}\">" +
+        "#{story.story_type.capitalize} #{story.id} - #{story.name}"
+      if story.story_type == "release"
+        html += " (#{story.deadline.to_s})"
+      end
+      unless story.current_state == "unstarted"
+        html += " (#{story.current_state})\n"
+      end
+      html += "</h2>\n"
+      if story.description
+        html += "<p class=\"description\">#{RedCloth.new(story.description).to_html}</p>\n"
       end
     end
     html
