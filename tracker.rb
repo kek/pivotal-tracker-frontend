@@ -55,6 +55,7 @@ class Project < ActiveResource::Base
   
   def current_stories
     StoryCollection.new(Story.find(:all, :params => { :project_id => self.id }).reject { |item|
+      # TODO: Reject stories with hidden tags
       item.current_state == "accepted"
     })
   end
